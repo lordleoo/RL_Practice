@@ -42,8 +42,8 @@ class Grid:
                                # 'K7'     : [-2,-1],
                                # 'K8'     : [-1,-2],
                                },
-                 Trans = 1, #FIXME# Transition matrix. not implemented.
-                 Reward = 0, #FIXME# Reward/penalty for every step you make. not implemented
+                 # Trans = 1, #FIXME# Transition matrix. not implemented.
+                 # Reward = 0, #FIXME# Reward/penalty for every step you make. not implemented
                  **kwargs):
 
         if isinstance(Map,np.ndarray): # if the map is a numpy array, take it as is
@@ -272,9 +272,12 @@ InputData0=  \
 [{
   'FileName'     : r"E:\LIST\Produce\Python practice\RL\GridWorld.xlsx",
   'Range'        : 'A:D',
-    'Sheet'        : 'Sheet1',
+    # 'Sheet'        : 'Sheet1',
     # 'Sheet'        : 'Sheet2',
     # 'Sheet'        : 'Sheet6',
+    # 'Sheet'        : 'Sheet8',
+    'Sheet'        : 'Sheet7',
+    # 'Sheet'        : 'Sheet9',
 },
 ]
 V_init = 0;
@@ -326,8 +329,8 @@ MyGrid.Paths
 #%%
 
 delta_target    = [1e-5, 5e-2]
-iter_max        = [3, 2e1]; # 1 corresponds to value iteraiton, np.inf corresponds to policy iteration;
-discount_factor = 1;
+iter_max        = [3, 1e3]; # 1 corresponds to value iteraiton, np.inf corresponds to policy iteration;
+discount_factor = 0.95; # for lage mazes, this should NOT be 1. should be less.
 itr             = [0 , 0]
 delta           = [1e6, 1e6]
 epsilon_greed   = lambda itr, eps_range, iter_max=iter_max[1]: np.exp(-7*itr / iter_max)*(np.ptp(eps_range)) + min(eps_range) if np.ptp(eps_range)>0 else np.max(eps_range);
@@ -391,7 +394,7 @@ while (itr[1] < iter_max[1]) and (delta[1] > delta_target[1]):
 
         delta[0] = np.max(abs(MyGrid.V - Vs0))
         if (itr[0] in np.ceil(np.arange(0, 1.1, 0.05) * iter_max[0]) or delta[0] < delta_target[0]):
-            print('Inner Iter#%3i, MAX value  update size = %g' %(itr[0], delta[0]))
+            print('Inner Iter#%3i, MAX value  update size = %g' %(itr[0]+1, delta[0]))
         itr[0] += 1;
 
     # outside the while loop
@@ -432,10 +435,10 @@ while (itr[1] < iter_max[1]) and (delta[1] > delta_target[1]):
 
 MyPrint = lambda *args: print(*args, sep='\n',end='\n'*2)
 MyPrint('Grid',MyGrid);
-MyPrint('Values',MyGrid.V);
+# MyPrint('Values',MyGrid.V);
 MyPrint('Best Action',MyGrid.BestAction);
 MyPrint('Road Plan',MyGrid.RoadPlan());
-sys.exit()
+sys.exit('Breakpoint')
 
 #%% play
 get_ipython().magic('%cls')
